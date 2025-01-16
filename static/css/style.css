@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: rgb(0, 164, 166); /* رنگ بیس */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: rgb(0, 130, 132); /* تغییر رنگ لینک‌ها در حالت hover */
+}
+
+main {
+    padding: 20px;
+}
+
+#book-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#book-list li {
+    background: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    height: 300px; /* ارتفاع تصویر بزرگتر */
+    width: 100%; /* عرض تصویر به اندازه کامل کارت */
+    object-fit: cover; /* تنظیم به گونه‌ای که تصویر به صورت مناسب برش بخورد */
+}
+
+.btn-primary {
+    background-color: rgb(0, 164, 166);
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: rgb(0, 130, 132); /* رنگ دکمه‌ها هنگام hover */
+}
+
+.card-body p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.card-body h5 {
+    font-size: 1.1rem;
+    color: rgb(0, 164, 166); /* رنگ عنوان کتاب */
+}
+
+.card-body a {
+    text-decoration: none;
+}
+header {
+    background-color: rgb(0, 164, 166); /* رنگ پس‌زمینه هدر */
+    color: white;
+    padding: 15px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* رنگ زمینه لینک‌ها در حالت hover */
+}
+
+/* تنظیمات برای موقعیت‌دهی به دکمه‌های ورودی و خروجی */
+header nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand a:hover {
+    color: rgb(255, 255, 255); /* رنگ عنوان کتابخانه هنگام hover */
+}
+

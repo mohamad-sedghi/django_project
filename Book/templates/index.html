@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    BOOK MS
+{% endblock %}
+
+{% block content %}
+    <main class="container my-5">
+        <h2 class="text-center mb-4">لیست کتاب‌ها</h2>
+        <div class="row justify-content-center" id="book-list">
+            <!-- حلقه برای نمایش کتاب‌ها -->
+            {% for book in books %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card shadow-sm text-center">
+                        {% if book.image %}
+                            <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
+                        {% else %}
+                            <img src="https://picsum.photos/300/400" class="card-img-top" alt="{{ book.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">
+                                <strong>نویسنده:</strong> {{ book.author }}<br>
+                                {% if book.translator %}
+                                    <strong>مترجم:</strong> {{ book.translator }}<br>
+                                {% endif %}
+                                <strong>ناشر:</strong> {{ book.publisher }}<br>
+                                <strong>تعداد کامنت:</strong> {{ book.comments_count }}
+                            </p>
+                            <a href="" class="btn btn-primary btn-sm">مشاهده جزئیات</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}
