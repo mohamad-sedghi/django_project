@@ -10,17 +10,14 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <!-- نمایش پیام‌های موفقیت یا خطا -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} text-center">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
+            
             <form method="post" novalidate>
                 {% csrf_token %}
                 
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger mb-3"> {{ error }}</div>
+                {% endfor %}
+
                 <!-- نمایش فیلدهای فرم -->
                 {% for field in form %}
                     <div class="mb-3">

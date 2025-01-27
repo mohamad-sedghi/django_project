@@ -28,7 +28,7 @@
                                 <strong>ناشر:</strong> {{ book.publisher }}<br>
                                 <strong>تعداد کامنت:</strong> {{ book.comments_count }}
                             </p>
-                            <a href="" class="btn btn-primary btn-sm">مشاهده جزئیات</a>
+                            <a href="{{ book.get_absolute_url }}" class="btn btn-primary btn-sm">مشاهده جزئیات</a>
                         </div>
                     </div>
                 </div>
