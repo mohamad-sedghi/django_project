@@ -24,53 +24,60 @@
                     <p class="card-text">{{ book.description }}</p>
                     <p class="card-text"><small class="text-muted">ایجاد شده در: {{ book.created_at|date:"Y-m-d" }}</small></p>
                     <p class="card-text"><small class="text-muted">تعداد نظرات: {{ book.comments_count }}</small></p>
+                    
+                    <!-- دکمه ویرایش و حذف فقط برای صاحب کتاب -->
+                    {% if request.user == book.user %}
+                    <div class="mt-3">
+                        <a href="{% url 'Book:edit_book' book.pk %}" class="btn btn-warning btn-sm">ویرایش کتاب</a>
+                        <a href="{% url 'Book:delete_book' book.pk %}" class="btn btn-danger btn-sm">حذف کتاب</a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
     
- 
-<!-- بخش کامنت‌ها -->
-<div class="mt-5">
-    <h4>نظرات کاربران</h4>
+    <!-- بخش کامنت‌ها -->
+    <div class="mt-5">
+        <h4>نظرات کاربران</h4>
 
-    <!-- لیست کامنت‌ها -->
-    <div class="comments-list mb-4">
-        {% if comments %}
-            {% for comment in comments %}
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <p class="card-text">{{ comment.text }}</p>
-                        <p class="card-text">
-                            <small class="text-muted">ارسال شده توسط {{ comment.author }} در {{ comment.created_at }}</small>
-                        </p>
+        <!-- لیست کامنت‌ها -->
+        <div class="comments-list mb-4">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text">{{ comment.text }}</p>
+                            <p class="card-text">
+                                <small class="text-muted">ارسال شده توسط {{ comment.author }} در {{ comment.created_at }}</small>
+                            </p>
 
-                        <!-- دکمه حذف برای نویسنده کامنت -->
-                        {% if comment.author == request.user %}
-                            <a href="{% url 'Book:delete_comment' comment.pk %}" class="btn btn-danger btn-sm">حذف کامنت</a>
-                        {% endif %}
+                            <!-- دکمه حذف برای نویسنده کامنت -->
+                            {% if comment.author == request.user %}
+                                <a href="{% url 'Book:delete_comment' comment.pk %}" class="btn btn-danger btn-sm">حذف کامنت</a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-muted">هنوز نظری ثبت نشده است.</p>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">هنوز نظری ثبت نشده است.</p>
+            {% endif %}
+        </div>
+
+        <!-- فرم ارسال کامنت -->
+        <h5>ارسال نظر جدید</h5>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.text }}
+            </div>
+            <button type="submit" class="btn btn-success">ارسال نظر</button>
+        </form>
     </div>
 
-    <!-- فرم ارسال کامنت -->
-    <h5>ارسال نظر جدید</h5>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            {{ form.text }}
-        </div>
-        <button type="submit" class="btn btn-success">ارسال نظر</button>
-    </form>
+    <div dir="rtl">
+        <a href="{% url 'Book:index' %}" class="btn btn-primary m-5" >بازگشت به صفحه اصلی</a>
+    </div>
+
 </div>
-
-
-<div dir="rtl">
-    <a href="{% url 'Book:index' %}" class="btn btn-primary m-5" >بازگشت به صفحه اصلی</a>
-</div>
-
 {% endblock %}

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Comment
 from django.contrib.auth import authenticate
+from .models import Book
 
 
 # فرم ثبت‌نام کاربر
@@ -68,14 +69,14 @@ class LoginForm(forms.Form):
 
     # بررسی صحت اطلاعات وارد شده
     def clean(self):
-        cleaned_data = super().clean()  # اعتبارسنجی پیش‌فرض
+        cleaned_data = super().clean()  
         username = cleaned_data.get("username")
         password = cleaned_data.get("password")
 
         # چک کردن اینکه کاربر با این نام کاربری و رمز عبور پیدا میشه یا نه
         user = authenticate(username=username, password=password)
         if user is None:
-            raise forms.ValidationError('نام کاربری یا رمز عبور اشتباهه!')  # اگه نتونستیم پیدا کنیم اینو می‌زنیم
+            raise forms.ValidationError('نام کاربری یا رمز عبور اشتباهه')  # اگه نتونستیم پیدا کنیم اینو می‌زنیم
         return cleaned_data
 
 
@@ -98,3 +99,11 @@ class CommentForm(forms.ModelForm):
         # فیلدهای مخفی برای اطلاعات کتاب و نویسنده کامنت
         book = forms.CharField(widget=forms.HiddenInput(), required=False)
         author = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'description', 'publisher', 'translator', 'image']
+

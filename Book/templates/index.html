@@ -8,6 +8,14 @@
 {% block content %}
     <main class="container my-5">
         <h2 class="text-center mb-4">لیست کتاب‌ها</h2>
+        
+        <!-- دکمه اضافه کردن کتاب (فقط برای کاربران لاگین شده) -->
+        {% if request.user.is_authenticated %}
+            <div class="text-center mb-4">
+                <a href="{% url 'Book:add_book' %}" class="btn btn-success">اضافه کردن کتاب</a>
+            </div>
+        {% endif %}
+
         <div class="row justify-content-center" id="book-list">
             <!-- حلقه برای نمایش کتاب‌ها -->
             {% for book in books %}

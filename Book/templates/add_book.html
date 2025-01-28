@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5" dir="rtl">
+    <h3>اضافه کردن کتاب جدید</h3>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">عنوان کتاب</label>
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            <label for="id_author" class="form-label">نویسنده</label>
+            {{ form.author }}
+        </div>
+        <div class="mb-3">
+            <label for="id_description" class="form-label">توضیحات</label>
+            {{ form.description }}
+        </div>
+        <div class="mb-3">
+            <label for="id_publisher" class="form-label">ناشر</label>
+            {{ form.publisher }}
+        </div>
+        <div class="mb-3">
+            <label for="id_translator" class="form-label">مترجم</label>
+            {{ form.translator }}
+        </div>
+        <div class="mb-3">
+            <label for="id_image" class="form-label">تصویر کتاب</label>
+            {{ form.image }}
+        </div>
+        <button type="submit" class="btn btn-success">اضافه کردن کتاب</button>
+    </form>
+</div>
+{% endblock %}

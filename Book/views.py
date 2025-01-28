@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse ,get_object_or_404
 from .models import Book, Comment
-from .forms import UserCreationForm, LoginForm, CommentForm
+from .forms import UserCreationForm, LoginForm, CommentForm , BookForm
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -34,7 +34,7 @@ def register(request):
                 return render(request, 'sign_up.html', {'form': form})
 
         else:
-            # اگر درخواست GET باشه، فرم خالی رو نمایش می‌ده
+            # باشه، فرم خالی رو نمایش می‌ده
             form = UserCreationForm()
 
         return render(request, 'sign_up.html', {'form': form})
@@ -110,3 +110,49 @@ def delete_comment(request, pk):
     
     # بعد از حذف کامنت، به صفحه جزئیات کتاب هدایت می‌کنیم
     return redirect('Book:book_detail', pk=comment.book.pk)
+
+
+
+
+# اضافه کردن کتاب
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            # کتاب جدید رو ذخیره می‌کنیم
+            book = form.save(commit=False)
+            book.user = request.user  # نویسنده کتاب رو تنظیم می‌کنیم به کاربر وارد شده
+            book.save()
+            return redirect('Book:index')  # بعد از اضافه کردن کتاب به صفحه اصلی برمی‌گردیم
+    else:
+        form = BookForm()
+    
+    return render(request, 'add_book.html', {'form': form})
+
+
+
+
+
+def edit_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if book.user != request.user:
+        return redirect('Book:book_detail', pk=pk)  # اگر کاربر دسترسی ندارد، به صفحه کتاب هدایت شود
+
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('Book:book_detail', pk=book.pk)
+    else:
+        form = BookForm(instance=book)
+    
+    return render(request, 'edit_book.html', {'form': form, 'book': book})
+
+
+
+# حذف کتاب
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if book.user == request.user:
+        book.delete()
+    return redirect('Book:index')  # بعد از حذف کتاب به صفحه اصلی باز می‌گردیم
