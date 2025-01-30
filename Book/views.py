@@ -15,11 +15,11 @@ def register(request):
     # چک می‌کنیم که کاربر لاگین نکرده باشه
     if not request.user.is_authenticated:
         if request.method == 'POST':
-            # ایجاد فرم ثبت‌نام با داده‌های POST
-            form = UserCreationForm(request.POST)
+       
+            form = UserCreationForm(request.POST) # گرفتن داده از فرم
 
             if form.is_valid():
-                # اگر فرم معتبر بود، کاربر جدید رو ثبت می‌کنیم
+                # کاربر جدید رو ثبت
                 Register_user=User.objects.create_user(
                     username=form.cleaned_data.get('username'),
                     email=form.cleaned_data.get('email'),
@@ -27,19 +27,19 @@ def register(request):
                 )
                 # بعد از ثبت‌نام، کاربر رو لاگین می‌کنیم
                 login(request, Register_user)
-                return redirect('Book:index')  # انتقال به صفحه اصلی
+                return redirect('Book:index')  # بعدشم ریدایرکت به صفجه اول
 
             else:
-                # اگر فرم اشتباه باشه، دوباره فرم رو با خطاها نشون می‌ده
+                #فرم رو دوباره با خطا نشون 
                 return render(request, 'sign_up.html', {'form': form})
 
         else:
-            # باشه، فرم خالی رو نمایش می‌ده
+           
             form = UserCreationForm()
 
-        return render(request, 'sign_up.html', {'form': form})
+        return render(request, 'sign_up.html', {'form': form})#فرم رو دوباره با خطا نشون 
     else:
-        return redirect('Book:index')  # اگر کاربر لاگین کرده، به صفحه اصلی هدایت می‌کنیم
+        return redirect('Book:index')  
 
 
 def user_login(request):
@@ -49,81 +49,77 @@ def user_login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             person = authenticate(request, username=username, password=password)
-            if person is not None:
+            if person is not None: 
                 # اگر کاربر معتبر بود، لاگینش می‌کنیم
                 login(request, person)
-                return redirect('Book:index')  # هدایت به صفحه اصلی
+                return redirect('Book:index')  
         else:
-            # اگر اطلاعات اشتباه باشه، فرم رو دوباره با خطا نشون می‌ده
+            #فرم رو دوباره با خطا نشون 
             return render(request, 'login.html', {'form': form})
     else:
-        # درخواست GET: فرم خالی رو نشون می‌ده
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
 
 def user_logout(request):
-    # اگر کاربر وارد شده، او رو لاگ‌اوت می‌کنیم
-    if request.user.is_authenticated:
-        logout(request)
+  
+    if request.user.is_authenticated:# کاربرلاگین بود 
+        logout(request)# لاگاوت بعد ریدایرکت
         return redirect('Book:index')
     else:
         return redirect('Book:login')
 
 
 def book_detail(request, pk):
-    # پیدا کردن کتاب با استفاده از pk
+    # pk پیدا کردن کتاب با استفاده از 
     book = Book.objects.get(id=pk)
-    # گرفتن نظرات مرتبط با این کتاب
-    comments = Comment.objects.filter(book=book)
+    comments = Comment.objects.filter(book=book) # کامنت های کتاب
     if request.method == 'POST':
-        # اگر کاربر لاگین باشه، کامنت جدید رو ذخیره می‌کنیم
         if request.user.is_authenticated:
             form = CommentForm(request.POST)
             if form.is_valid():
                 # ایجاد کامنت جدید
                 comment = form.save(commit=False)
-                comment.author = request.user  # نویسنده کامنت همون کاربر فعلی
-                comment.book = book  # کتاب مرتبط
+                comment.author = request.user  
+                comment.book = book  
                 comment.save()
-                # به‌روز رسانی تعداد نظرات کتاب
+              
                 book.comments_count += 1 
                 book.save()
-                return redirect(reverse('Book:book_detail', args=[pk]))  # بازگشت به صفحه جزئیات کتاب
+                return redirect(reverse('Book:book_detail', args=[pk]))  # برگشت به جزئیات کتاب
         else:
-            return redirect('Book:login')  # اگر کاربر لاگین نکرده، به صفحه لاگین هدایت می‌شود
+            return redirect('Book:login')  
     else:
         if book is None:
-            return redirect('Book:index')  # اگر کتاب پیدا نشد، به صفحه اصلی هدایت می‌کنیم
+            return redirect('Book:index')  
         else:
             form = CommentForm()
             return render(request, 'book_detail.html', {'book': book, 'comments': comments, 'form': form})
 
 
 def delete_comment(request, pk):
-    # پیدا کردن کامنت بر اساس pk
+    #pkپیدا کردن کامنت بر اساس 
     comment = get_object_or_404(Comment, pk=pk)
     
-    # بررسی اینکه آیا کاربر لاگین شده نویسنده کامنت هست یا نه
+    #چک کاربر لاگین شده همون نویسنده کامنت هست یا نه
     if comment.author == request.user:
-        comment.delete()  # اگر بله، کامنت رو حذف می‌کنیم
+        comment.delete()  
     
-    # بعد از حذف کامنت، به صفحه جزئیات کتاب هدایت می‌کنیم
+   
     return redirect('Book:book_detail', pk=comment.book.pk)
 
 
 
 
-# اضافه کردن کتاب
 def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-            # کتاب جدید رو ذخیره می‌کنیم
+      
             book = form.save(commit=False)
-            book.user = request.user  # نویسنده کتاب رو تنظیم می‌کنیم به کاربر وارد شده
+            book.user = request.user 
             book.save()
-            return redirect('Book:index')  # بعد از اضافه کردن کتاب به صفحه اصلی برمی‌گردیم
+            return redirect('Book:index') 
     else:
         form = BookForm()
     
@@ -132,14 +128,13 @@ def add_book(request):
 
 
 
-
 def edit_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    if book.user != request.user:
-        return redirect('Book:book_detail', pk=pk)  # اگر کاربر دسترسی ندارد، به صفحه کتاب هدایت شود
+    if book.user != request.user: #diffrent user
+        return redirect('Book:book_detail', pk=pk)  
 
     if request.method == 'POST':
-        form = BookForm(request.POST, request.FILES, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book) # فایل واسه عکس کتابه
         if form.is_valid():
             form.save()
             return redirect('Book:book_detail', pk=book.pk)
@@ -150,9 +145,8 @@ def edit_book(request, pk):
 
 
 
-# حذف کتاب
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if book.user == request.user:
         book.delete()
-    return redirect('Book:index')  # بعد از حذف کتاب به صفحه اصلی باز می‌گردیم
+    return redirect('Book:index')  

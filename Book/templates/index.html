@@ -6,41 +6,41 @@
 {% endblock %}
 
 {% block content %}
-    <main class="container my-5">
-        <h2 class="text-center mb-4">لیست کتاب‌ها</h2>
-        
-        <!-- دکمه اضافه کردن کتاب (فقط برای کاربران لاگین شده) -->
-        {% if request.user.is_authenticated %}
-            <div class="text-center mb-4">
-                <a href="{% url 'Book:add_book' %}" class="btn btn-success">اضافه کردن کتاب</a>
-            </div>
-        {% endif %}
+<main class="container my-5" style="font-family: 'IRANSans', Arial, sans-serif;">
+    <h2 class="text-center mb-4" style="font-size: 2rem; font-weight: bold;">لیست کتاب‌ها</h2>
+    
+    <!-- دکمه اضافه کردن کتاب (فقط برای کاربران لاگین شده) -->
+    {% if request.user.is_authenticated %}
+        <div class="text-center mb-4">
+            <a href="{% url 'Book:add_book' %}" class="btn btn-success" style="font-size: 1.2rem;">اضافه کردن کتاب</a>
+        </div>
+    {% endif %}
 
-        <div class="row justify-content-center" id="book-list">
-            <!-- حلقه برای نمایش کتاب‌ها -->
-            {% for book in books %}
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card shadow-sm text-center">
-                        {% if book.image %}
-                            <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
-                        {% else %}
-                            <img src="https://picsum.photos/300/400" class="card-img-top" alt="{{ book.title }}">
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ book.title }}</h5>
-                            <p class="card-text">
-                                <strong>نویسنده:</strong> {{ book.author }}<br>
-                                {% if book.translator %}
-                                    <strong>مترجم:</strong> {{ book.translator }}<br>
-                                {% endif %}
-                                <strong>ناشر:</strong> {{ book.publisher }}<br>
-                                <strong>تعداد کامنت:</strong> {{ book.comments_count }}
-                            </p>
-                            <a href="{{ book.get_absolute_url }}" class="btn btn-primary btn-sm">مشاهده جزئیات</a>
-                        </div>
+    <div class="row justify-content-center" id="book-list">
+        <!-- حلقه برای نمایش کتاب‌ها -->
+        {% for book in books %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card shadow-sm text-center">
+                    {% if book.image %}
+                        <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://picsum.photos/300/400" class="card-img-top" alt="{{ book.title }}" style="height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title" style="font-size: 1.4rem; font-weight: bold;">{{ book.title }}</h5>
+                        <p class="card-text" style="font-size: 1.1rem;">
+                            <strong>نویسنده:</strong> {{ book.author }}<br>
+                            {% if book.translator %}
+                                <strong>مترجم:</strong> {{ book.translator }}<br>
+                            {% endif %}
+                            <strong>ناشر:</strong> {{ book.publisher }}<br>
+                            <strong>تعداد کامنت:</strong> {{ book.comments_count }}
+                        </p>
+                        <a href="{{ book.get_absolute_url }}" class="btn btn-primary btn-sm" style="font-size: 1rem;">مشاهده جزئیات</a>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
-    </main>
+            </div>
+        {% endfor %}
+    </div>
+</main>
 {% endblock %}

@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5" dir="rtl">
+<div class="container mt-5" dir="rtl" style="font-family: 'IRANSans', Arial, sans-serif;">
     <!-- بخش جزئیات کتاب -->
     <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
                 {% if book.image %}
-                    <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
+                    <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}" style="height: 500px; object-fit: cover;">
                 {% else %}
-                    <img src="https://picsum.photos/300/400" class="card-img-top" alt="{{ book.title }}">
+                    <img src="https://picsum.photos/300/500" class="card-img-top" alt="{{ book.title }}" style="height: 500px; object-fit: cover;">
                 {% endif %}
             </div>
             <div class="col-md-8">
                 <div class="card-body text-end">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                    <p class="card-text"><strong>نویسنده:</strong> {{ book.author }}</p>
+                    <h5 class="card-title" style="font-size: 1.8rem; font-weight: bold;">{{ book.title }}</h5>
+                    <p class="card-text" style="font-size: 1.2rem;"><strong>نویسنده:</strong> {{ book.author }}</p>
                     {% if book.translator %}
-                    <p class="card-text"><strong>مترجم:</strong> {{ book.translator }}</p>
+                    <p class="card-text" style="font-size: 1.2rem;"><strong>مترجم:</strong> {{ book.translator }}</p>
                     {% endif %}
-                    <p class="card-text"><strong>ناشر:</strong> {{ book.publisher }}</p>
-                    <p class="card-text"><strong>توضیحات:</strong></p>
-                    <p class="card-text">{{ book.description }}</p>
+                    <p class="card-text" style="font-size: 1.2rem;"><strong>ناشر:</strong> {{ book.publisher }}</p>
+                    <p class="card-text" style="font-size: 1.2rem;"><strong>توضیحات:</strong></p>
+                    <p class="card-text" style="font-size: 1.1rem; line-height: 1.6;">{{ book.description }}</p>
                     <p class="card-text"><small class="text-muted">ایجاد شده در: {{ book.created_at|date:"Y-m-d" }}</small></p>
                     <p class="card-text"><small class="text-muted">تعداد نظرات: {{ book.comments_count }}</small></p>
                     
@@ -39,7 +39,7 @@
     
     <!-- بخش کامنت‌ها -->
     <div class="mt-5">
-        <h4>نظرات کاربران</h4>
+        <h4 style="font-size: 1.6rem; font-weight: bold;">نظرات کاربران</h4>
 
         <!-- لیست کامنت‌ها -->
         <div class="comments-list mb-4">
@@ -47,8 +47,8 @@
                 {% for comment in comments %}
                     <div class="card mb-2">
                         <div class="card-body">
-                            <p class="card-text">{{ comment.text }}</p>
-                            <p class="card-text">
+                            <p class="card-text" style="font-size: 1.1rem;">{{ comment.text }}</p>
+                            <p class="card-text" style="font-size: 0.9rem;">
                                 <small class="text-muted">ارسال شده توسط {{ comment.author }} در {{ comment.created_at }}</small>
                             </p>
 
@@ -60,12 +60,12 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p class="text-muted">هنوز نظری ثبت نشده است.</p>
+                <p class="text-muted" style="font-size: 1rem;">هنوز نظری ثبت نشده است.</p>
             {% endif %}
         </div>
 
         <!-- فرم ارسال کامنت -->
-        <h5>ارسال نظر جدید</h5>
+        <h5 style="font-size: 1.4rem;">ارسال نظر جدید</h5>
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
@@ -76,7 +76,7 @@
     </div>
 
     <div dir="rtl">
-        <a href="{% url 'Book:index' %}" class="btn btn-primary m-5" >بازگشت به صفحه اصلی</a>
+        <a href="{% url 'Book:index' %}" class="btn btn-primary m-5">بازگشت به صفحه اصلی</a>
     </div>
 
 </div>

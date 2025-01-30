@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from .models import Book
 
 
-# فرم ثبت‌نام کاربر
+
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label='تکرار رمز عبور')
@@ -19,21 +19,21 @@ class UserCreationForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
-    # بررسی اینکه نام کاربری قبلا ثبت شده یا نه
+
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():  # اگه تکراری بود
             raise forms.ValidationError('این نام‌کاربری قبلاً انتخاب شده.')  
         return username
 
-    # بررسی اینکه ایمیل قبلا ثبت شده یا نه
+  
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():  # اگه تکراری بود
             raise forms.ValidationError('این ایمیل قبلاً ثبت شده.')  
         return email
 
-    # بررسی اینکه رمز عبور و تکرارش یکی هستن یا نه
+
     def clean_password2(self):
         password = self.cleaned_data.get('password')
         password2 = self.cleaned_data.get('password2')
@@ -73,10 +73,10 @@ class LoginForm(forms.Form):
         username = cleaned_data.get("username")
         password = cleaned_data.get("password")
 
-        # چک کردن اینکه کاربر با این نام کاربری و رمز عبور پیدا میشه یا نه
+        #username و password چک کردن
         user = authenticate(username=username, password=password)
         if user is None:
-            raise forms.ValidationError('نام کاربری یا رمز عبور اشتباهه')  # اگه نتونستیم پیدا کنیم اینو می‌زنیم
+            raise forms.ValidationError('نام کاربری یا رمز عبور اشتباهه')  
         return cleaned_data
 
 
@@ -84,7 +84,7 @@ class LoginForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']  # فقط فیلد متن کامنت رو نشون می‌ده
+        fields = ['text']  
         widgets = {
             'text': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -102,8 +102,8 @@ class CommentForm(forms.ModelForm):
 
 
 
-class BookForm(forms.ModelForm):
-    class Meta:
+class BookForm(forms.ModelForm): # واسه اد بوک
+    class Meta:   
         model = Book
         fields = ['title', 'author', 'description', 'publisher', 'translator', 'image']
 
