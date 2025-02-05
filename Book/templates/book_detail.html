@@ -49,6 +49,43 @@
             </div>
         </div>
     </div>
+
+    <div class="mt-5">
+        <h4 style="font-size: 1.6rem; font-weight: bold;">نظرات کاربران</h4>
+
+        <!-- لیست کامنت‌ها -->
+        <div class="comments-list mb-4">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text" style="font-size: 1.1rem;">{{ comment.text }}</p>
+                            <p class="card-text" style="font-size: 0.9rem;">
+                                <small class="text-muted">ارسال شده توسط {{ comment.author }} در {{ comment.created_at }}</small>
+                            </p>
+
+                            <!-- دکمه حذف برای نویسنده کامنت -->
+                            {% if comment.author == request.user %}
+                                <a href="{% url 'Book:delete_comment' comment.pk %}" class="btn btn-danger btn-sm">حذف کامنت</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted" style="font-size: 1rem;">هنوز نظری ثبت نشده است.</p>
+            {% endif %}
+        </div>
+
+        <!-- فرم ارسال کامنت -->
+        <h5 style="font-size: 1.4rem;">ارسال نظر جدید</h5>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.text }}
+            </div>
+            <button type="submit" class="btn btn-success">ارسال نظر</button>
+        </form>
+    </div>
     
     <div dir="rtl">
         <a href="{% url 'Book:index' %}" class="btn btn-primary m-5">بازگشت به صفحه اصلی</a>
