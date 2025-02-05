@@ -35,6 +35,9 @@
                             {% endif %}
                             <strong>ناشر:</strong> {{ book.publisher }}<br>
                             <strong>تعداد کامنت:</strong> {{ book.comments_count }}
+                            <div>
+                                {{ book.likes_count }} :لایک
+                            </div>                            
                         </p>
                         <a href="{{ book.get_absolute_url }}" class="btn btn-primary btn-sm" style="font-size: 1rem;">مشاهده جزئیات</a>
                     </div>

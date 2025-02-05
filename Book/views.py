@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, reverse ,get_object_or_404
 from .models import Book, Comment
+from django.http import JsonResponse
 from .forms import UserCreationForm, LoginForm, CommentForm , BookForm
 from django.contrib.auth import authenticate, login, logout
 
@@ -150,3 +151,20 @@ def delete_book(request, pk):
     if book.user == request.user:
         book.delete()
     return redirect('Book:index')  
+
+
+
+
+def toggle_like(request, pk):
+    if request.user.is_authenticated:  
+        book = Book.objects.get(pk=pk)
+        if request.user in book.likes.all():
+            # اگر کاربر قبلاً لایک کرده بود، لایک را حذف می‌کنیم
+            book.likes.remove(request.user)
+        else:
+            # اگر کاربر لایک نکرده بود، لایک را اضافه می‌کنیم
+            book.likes.add(request.user)
+
+        return redirect('Book:book_detail', pk=book.pk)
+    else:
+        return redirect('Book:login')  

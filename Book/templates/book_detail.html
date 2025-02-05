@@ -16,15 +16,28 @@
                 <div class="card-body text-end">
                     <h5 class="card-title" style="font-size: 1.8rem; font-weight: bold;">{{ book.title }}</h5>
                     <p class="card-text" style="font-size: 1.2rem;"><strong>نویسنده:</strong> {{ book.author }}</p>
-                    {% if book.translator %}
-                    <p class="card-text" style="font-size: 1.2rem;"><strong>مترجم:</strong> {{ book.translator }}</p>
-                    {% endif %}
                     <p class="card-text" style="font-size: 1.2rem;"><strong>ناشر:</strong> {{ book.publisher }}</p>
                     <p class="card-text" style="font-size: 1.2rem;"><strong>توضیحات:</strong></p>
                     <p class="card-text" style="font-size: 1.1rem; line-height: 1.6;">{{ book.description }}</p>
                     <p class="card-text"><small class="text-muted">ایجاد شده در: {{ book.created_at|date:"Y-m-d" }}</small></p>
-                    <p class="card-text"><small class="text-muted">تعداد نظرات: {{ book.comments_count }}</small></p>
+                    <p class="card-text"><small class="text-muted">تعداد لایک‌ها: <span class="likes-count">{{ book.likes_count }}</span></small></p>
                     
+                    <!-- دکمه لایک -->
+                    {% if request.user.is_authenticated %}
+                        <form action="{% url 'Book:toggle_like' book.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary">
+                                {% if request.user in book.likes.all %}
+                                    ❤️ لایک شده
+                                {% else %}
+                                    ♡ لایک
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'Book:login' %}" class="btn btn-outline-primary" style="font-size: 1.2rem;">برای لایک کردن باید وارد شوید</a>
+                    {% endif %}
+
                     <!-- دکمه ویرایش و حذف فقط برای صاحب کتاب -->
                     {% if request.user == book.user %}
                     <div class="mt-3">
@@ -37,44 +50,6 @@
         </div>
     </div>
     
-    <!-- بخش کامنت‌ها -->
-    <div class="mt-5">
-        <h4 style="font-size: 1.6rem; font-weight: bold;">نظرات کاربران</h4>
-
-        <!-- لیست کامنت‌ها -->
-        <div class="comments-list mb-4">
-            {% if comments %}
-                {% for comment in comments %}
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <p class="card-text" style="font-size: 1.1rem;">{{ comment.text }}</p>
-                            <p class="card-text" style="font-size: 0.9rem;">
-                                <small class="text-muted">ارسال شده توسط {{ comment.author }} در {{ comment.created_at }}</small>
-                            </p>
-
-                            <!-- دکمه حذف برای نویسنده کامنت -->
-                            {% if comment.author == request.user %}
-                                <a href="{% url 'Book:delete_comment' comment.pk %}" class="btn btn-danger btn-sm">حذف کامنت</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-muted" style="font-size: 1rem;">هنوز نظری ثبت نشده است.</p>
-            {% endif %}
-        </div>
-
-        <!-- فرم ارسال کامنت -->
-        <h5 style="font-size: 1.4rem;">ارسال نظر جدید</h5>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                {{ form.text }}
-            </div>
-            <button type="submit" class="btn btn-success">ارسال نظر</button>
-        </form>
-    </div>
-
     <div dir="rtl">
         <a href="{% url 'Book:index' %}" class="btn btn-primary m-5">بازگشت به صفحه اصلی</a>
     </div>

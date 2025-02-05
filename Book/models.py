@@ -14,9 +14,13 @@ class Book(models.Model):
     translator = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     comments_count = models.IntegerField(default=0, null=False)
+    likes = models.ManyToManyField(User, related_name='liked_books', blank=True)
 
     def __str__(self):
         return self.title  #for show in admin panel
+    
+    def likes_count(self):
+        return self.likes.count()
    
     def get_absolute_url(self):
         return reverse("Book:book_detail", args=[self.pk]) # url book_detail 
